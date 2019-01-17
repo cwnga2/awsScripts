@@ -11,6 +11,9 @@ function getLambdaAliasCloudFormationFromTargetAlias()
   local aliasName=$3
   local version
   version=$(aws lambda get-alias --function-name "$functionName" --name "$currentAliasName" | jq ".FunctionVersion | tonumber")
+  if [ "$version" == "" ]; then
+      exit 1;
+  fi
 
   cloudformation=$(cat <<EOF
   ${functionName}Tag${aliasName}:
